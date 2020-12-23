@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { table } from 'console';
+import { Sign, Matrix } from './table-config';
+
 @Injectable({
   providedIn: 'root'
 })

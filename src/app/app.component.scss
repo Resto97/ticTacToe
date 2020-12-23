@@ -1,4 +1,5 @@
 $base-width: 400px;
+
 h1 {
   text-align: center;
   background-color: black;
@@ -6,6 +7,7 @@ h1 {
   margin-bottom: 0px;
   margin-top: 0px;
 }
+
 ul {
   list-style-type: none;
   margin: 0;
@@ -13,11 +15,10 @@ ul {
   overflow: hidden;
   background-color: white;
 }
-.nav-itemR {
-  float: right;
-}
+
 li {
   float: left;
+
   a {
     display: block;
     padding: 6px 14px;
@@ -25,11 +26,17 @@ li {
     text-align: center;
     text-decoration: none;
     color: black;
+
     &:hover {
       background-color: silver;
     }
+
     &.active {
-      background-color: rgb(170, 170, 170);
+      background: rgb(170, 170, 170);
     }
   }
+}
+
+.nav-itemR {
+  float: right;
 }

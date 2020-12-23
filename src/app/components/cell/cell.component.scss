@@ -7,13 +7,16 @@
   align-items: center;
   justify-content: center;
   justify-items: center;
+
   &.O {
     background-color: rgb(251, 21, 105);
   }
+
   &.X {
     background-color: rgb(1, 217, 146);
   }
 }
+
 button {
   margin-bottom: 2px;
   margin-left: 2px;
@@ -27,13 +30,16 @@ button {
   height: 100%;
   width: 100%;
   background-color: rgb(88, 88, 88);
-  &:hover{
+
+  &:hover:not([disabled]) {
     background-color: honeydew;
   }
 }
+
 .clickedTrue {
   pointer-events: none;
 }
+
 .wholeCell {
   padding: 0;
   border: none;

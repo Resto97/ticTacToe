@@ -1,4 +1,4 @@
-import { Component, Output } from '@angular/core';
+import { Component, Output, AfterViewInit } from '@angular/core';
 import * as Feather from 'feather-icons';
 
 @Component({
@@ -6,11 +6,11 @@ import * as Feather from 'feather-icons';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title(title: any) {
     throw new Error('Method not implemented.');
   }
-  // tslint:disable-next-line:use-lifecycle-interface
+
   ngAfterViewInit() {
     Feather.replace();
   }

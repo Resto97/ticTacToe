@@ -7,8 +7,7 @@ import { TableComponent } from './components/table/table.component';
 import { CellComponent } from './components/cell/cell.component';
 import { HomeComponent } from './components/home/home.component';
 import { RegisterComponent } from './components/register/register.component';
-import { HttpClientModule } from '@angular/common/http';
-import { InlineSVGModule } from 'ng-inline-svg';
+import { TableConfig } from './services/table-config';
 
 
 @NgModule({
@@ -17,13 +16,19 @@ import { InlineSVGModule } from 'ng-inline-svg';
     TableComponent,
     CellComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: TableConfig,
+      useValue: new TableConfig(4, 5, 4),
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}
