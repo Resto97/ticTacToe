@@ -1,16 +1,19 @@
 <div class="backGround">
-  <h3>Player: {{ nextPlayer }} turn</h3>
+  <h3 *ngIf="isThereWinner; else elseBlok">GAME OVER!</h3>
+  <ng-template #elseBlok>
+    <h3>Player: {{ nextPlayer }} turn</h3>
+  </ng-template>
   <div class="tableContainer">
     <table>
       <tr *ngFor="let row of numbers; index as i">
-        <td *ngFor="let col of numbers; index as j">
+        <td *ngFor="let col of numbers1; index as j">
           <app-cell (cellClicked)="cellIsClicked(i, j)" [sign]="nextPlayer">
           </app-cell>
         </td>
       </tr>
     </table>
   </div>
-  <h3 *ngIf="winner; else elseBlock">{{ displayMessage }}</h3>
+  <h3 *ngIf="isThereWinner; else elseBlock">{{ displayMessage }}</h3>
   <ng-template #elseBlock>
     <h3>Game in progress</h3>
   </ng-template>

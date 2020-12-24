@@ -7,9 +7,9 @@ button {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-}
-button:hover {
-  background-color: silver;
+  &:hover {
+    background-color: silver;
+  }
 }
 div.backGround {
   background-color: rgb(88, 88, 88);
@@ -17,7 +17,7 @@ div.backGround {
   flex-direction: column;
   text-align: center;
   color: white;
-  height: 540px;
+  height: 100%;
 }
 div.tableContainer {
   justify-items: center;
@@ -30,12 +30,12 @@ table {
   table-layout: fixed;
   border-collapse: collapse;
   border-style: hidden;
-}
-table td {
-  padding: 1rem;
-  overflow: hidden;
-  height: 95px;
-  width: 90px;
-  border: 3px solid white;
-  text-align: center;
+  td {
+    padding: 1rem;
+    overflow: hidden;
+    height: 95px;
+    width: 90px;
+    border: 3px solid white;
+    text-align: center;
+  }
 }

@@ -21,6 +21,7 @@
     "@angular/router": "~11.0.5",
     "@types/feather-icons": "^4.7.0",
     "feather-icons": "^4.28.0",
+    "ng-inline-svg": "^11.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

@@ -13,20 +13,23 @@ ul {
   overflow: hidden;
   background-color: white;
 }
-li {
-  float: left;
-}
 .nav-itemR {
   float: right;
 }
-li a {
-  display: block;
-  padding: 6px 14px;
-  background-color: white;
-  text-align: center;
-  text-decoration: none;
-  color: black;
-}
-li a:hover {
-  background-color: silver;
+li {
+  float: left;
+  a {
+    display: block;
+    padding: 6px 14px;
+    background-color: white;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    &:hover {
+      background-color: silver;
+    }
+    &.active {
+      background-color: rgb(170, 170, 170);
+    }
+  }
 }

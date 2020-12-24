@@ -1,5 +1,4 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import * as Feather from 'feather-icons';
 import { Button } from 'protractor';
 
 @Component({
@@ -28,11 +27,7 @@ export class CellComponent {
     this.isClick = true;
     this.button.disabled = true;
   }
-  refresh() {
-    Feather.replace();
-  }
   isClicked(): boolean {
-    this.refresh();
     return this.isClick;
   }
   isX(): boolean {
@@ -45,7 +40,6 @@ export class CellComponent {
     this.isClick = true;
     this.button.disabled = true;
     this.currentPlayer = this.sign;
-    Feather.replace();
     this.cellClicked.emit();
   }
 }

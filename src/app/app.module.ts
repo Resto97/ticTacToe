@@ -7,7 +7,8 @@ import { TableComponent } from './components/table/table.component';
 import { CellComponent } from './components/cell/cell.component';
 import { HomeComponent } from './components/home/home.component';
 import { RegisterComponent } from './components/register/register.component';
-
+import { HttpClientModule } from '@angular/common/http';
+import { InlineSVGModule } from 'ng-inline-svg';
 
 
 @NgModule({
