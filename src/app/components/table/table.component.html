@@ -5,10 +5,13 @@
   </ng-template>
   <div class="tableContainer">
     <table>
-      <tr *ngFor="let row of numbers; index as i">
-        <td *ngFor="let col of numbers1; index as j">
-          <app-cell (cellClicked)="cellIsClicked(i, j)" [sign]="nextPlayer">
-          </app-cell>
+      <tr *ngFor="let row of rowMatrix; index as i">
+        <td *ngFor="let sign of row; index as j">
+          <app-cell
+            (cellClicked)="cellIsClicked(i, j)"
+            [sign]="sign"
+            [isDisabled]="isThereWinner"
+          ></app-cell>
         </td>
       </tr>
     </table>
@@ -21,3 +24,5 @@
     <button (click)="resetGame($event)">New game</button>
   </div>
 </div>
+
+<pre>{{ rowMatrix | json }}</pre>

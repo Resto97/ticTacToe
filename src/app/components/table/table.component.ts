@@ -1,61 +1,59 @@
 import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { CalculationService } from 'src/app/services/calculation.service';
 import { CellComponent } from '../cell/cell.component';
+import { TableConfig, Matrix, Sign } from '../../services/table-config';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss']
+  styleUrls: ['./table.component.scss'],
 })
-
 export class TableComponent {
+
   public turnCounter = 0;
   public isThereWinner = false;
   public displayMessage = '';
-  public nextPlayer = 'X';
-  public columnMatrix: string[][] = [];
-  public rowMatrix: string[][] = [];
-  public signsForWinner = 4;
-  public tableWidth = 5;
-  public tableHeight = 4;
-  public numbers = Array(this.tableHeight).fill(0);
-  public numbers1 = Array(this.tableWidth).fill(0);
+  public nextPlayer: Sign = 'X';
 
-  constructor(private calculationService: CalculationService) {
+  public columnMatrix: Matrix<Sign> = [];
+  public rowMatrix: Matrix<Sign> = [];
+  public signsForWinner = this.tableConfig.signsNeededForWin;
+  public tableWidth = this.tableConfig.columnsCount;
+  public tableHeight = this.tableConfig.rowsCount;
+
+  constructor(
+    private calculationService: CalculationService,
+    private readonly tableConfig: TableConfig,
+  ) {
     this.resetTableMatrix();
   }
 
   @ViewChildren(CellComponent)
   childCells!: QueryList<CellComponent>;
 
-  resetCells() {
-    this.childCells.forEach(c => c.reset());
-  }
-  disableCells() {
-    this.childCells.forEach(c => c.disableCell());
-  }
   resetTableMatrix() {
+    this.rowMatrix = this.tableConfig.createEmptyTable();
+    this.columnMatrix = [];
     for (let i = 0; i < this.tableWidth; i++) {
-      this.columnMatrix[i] = Array(this.tableHeight).fill('');
-    }
-    for (let i = 0; i < this.tableHeight; i++) {
-      this.rowMatrix[i] = Array(this.tableWidth).fill('');
+      this.columnMatrix[i] = Array.from<''>({ length: this.tableHeight }).fill('');
     }
   }
+
   resetGame($event: any) {
     this.turnCounter = 0;
     this.isThereWinner = false;
     this.displayMessage = '';
     this.nextPlayer = 'X';
     this.resetTableMatrix();
-    this.resetCells();
   }
+
   weHaveWinner() {
     this.isThereWinner = true;
     this.displayMessage = 'Winner is ' + this.nextPlayer;
-    this.disableCells();
   }
+
   cellIsClicked(row: number, column: number) {
+    console.log('clicked', row, column, this.tableConfig);
     this.turnCounter++;
     this.columnMatrix[column][row] = this.nextPlayer;
     this.rowMatrix[row][column] = this.nextPlayer;
@@ -84,8 +82,7 @@ export class TableComponent {
         colNumberToCheck--;
         if (rowNumberToCheck > -1 && colNumberToCheck > -1) {
           diagonalArray.unshift(this.rowMatrix[rowNumberToCheck][colNumberToCheck]);
-        }
-        else {
+        } else {
           isThereMoreElements = false;
         }
       }
@@ -99,8 +96,7 @@ export class TableComponent {
         colNumberToCheck++;
         if (rowNumberToCheck < this.tableHeight && colNumberToCheck < this.tableWidth) {
           diagonalArray.push(this.rowMatrix[rowNumberToCheck][colNumberToCheck]);
-        }
-        else {
+        } else {
           isThereMoreElements = false;
         }
       }
@@ -124,8 +120,7 @@ export class TableComponent {
         colNumberToCheck--;
         if (rowNumberToCheck < this.tableHeight && colNumberToCheck > -1) {
           antiDiagonalArray.unshift(this.rowMatrix[rowNumberToCheck][colNumberToCheck]);
-        }
-        else {
+        } else {
           isThereMoreElements = false;
         }
       }
@@ -139,8 +134,7 @@ export class TableComponent {
         colNumberToCheck++;
         if (rowNumberToCheck > -1 && colNumberToCheck < this.tableWidth) {
           antiDiagonalArray.push(this.rowMatrix[rowNumberToCheck][colNumberToCheck]);
-        }
-        else {
+        } else {
           isThereMoreElements = false;
         }
       }
@@ -164,13 +158,12 @@ export class TableComponent {
 }
 
 
-
 /* this.turnCounter++;
     this.tableMatrix[row][column] = this.nextPlayer;
-    if (this.turnCounter > 4) {
+    if (this.turnCounter > this.tableConfig.minimalTurnsToWin) {
       const getWinner = this.calculationService.getWinnerIfThereIs(this.tableMatrix, row, column);
-      if (getWinner !== 'N') {  // N is returned when there is no winner
-        this.winner = true;
+      if (getWinner !== '') {
+        this.hasWinnerOrTie = true;
         this.displayMessage = 'Winner is ' + this.nextPlayer;
         this.getNthColumn(0);
         console.log(this.columnMatrix);
@@ -178,8 +171,8 @@ export class TableComponent {
         this.disableCells();
         return;
       }
-      if (this.turnCounter === 9) {
-        this.winner = true;
+      if (this.turnCounter === this.tableConfig.cellsCount) {
+        this.hasWinnerOrTie = true;
         this.displayMessage = 'Its a tie';
         return;
       }

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Button } from 'protractor';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Sign } from '../../services/table-config';
 
 @Component({
   selector: 'app-cell',
@@ -7,39 +7,26 @@ import { Button } from 'protractor';
   styleUrls: ['./cell.component.scss']
 })
 export class CellComponent {
-  public isClick = false;
-  public currentPlayer = ''; // X or O
 
   @Input()
-  public sign!: string;
+  public sign!: Sign;
+
+  @Input()
+  public isDisabled = false;
 
   @Output()
   cellClicked = new EventEmitter();
 
-  @ViewChild('buttonCell') button!: HTMLButtonElement;
+  public get isX(): boolean {
+    return this.sign === 'X' ? true : false;
+  }
 
-  reset() {
-    this.currentPlayer = '';
-    this.isClick = false;
-    this.button.disabled = false;
+  public get isO(): boolean {
+    return this.sign === 'O' ? true : false;
   }
-  disableCell() {
-    this.isClick = true;
-    this.button.disabled = true;
-  }
-  isClicked(): boolean {
-    return this.isClick;
-  }
-  isX(): boolean {
-    return this.currentPlayer === 'X' ? true : false;
-  }
-  isO(): boolean {
-    return this.currentPlayer === 'O' ? true : false;
-  }
-  updateCellState($event: any) {
-    this.isClick = true;
-    this.button.disabled = true;
-    this.currentPlayer = this.sign;
+
+  updateCellState(): void {
     this.cellClicked.emit();
   }
+
 }
