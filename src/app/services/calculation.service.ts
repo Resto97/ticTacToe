@@ -1,24 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Sign, Matrix } from './table-config';
+import { Coord } from '../utils';
+import { getNextToLastParentNode } from 'codelyzer/util/utils';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CalculationService {
-  getWinnerIfThereIsOne(arrayToCheck: string[], consecutiveSigns: number): string {
+  getWinnerIfThereIsOne(
+    matrix: Matrix<Sign>,
+    start: Coord,
+    deltaI: number,
+    deltaJ: number,
+    iterationsCount: number,
+    consecutiveSigns: number,
+  ): string {
+    let i = start.i;
+    let j = start.j;
     let counterSigns = 0;
     // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < arrayToCheck.length - 1; i++){
-      if (arrayToCheck[i] !== '' && arrayToCheck[i + 1] !== '' && arrayToCheck[i] === arrayToCheck[i + 1]){
+    for (let iteration = 0; iteration < iterationsCount; iteration++) {
+      const current = matrix[i][j];
+      const next = matrix[i + deltaI][j + deltaJ];
+      if (current !== '' && next !== '' && current === next) {
         counterSigns++;
-        if (counterSigns === consecutiveSigns - 1)
-        {
-          return arrayToCheck[i];
+        if (counterSigns === consecutiveSigns - 1) {
+          return current;
         }
-      }
-      else{
+      } else {
         counterSigns = 0;
       }
+      i += deltaI;
+      j += deltaJ;
     }
     return 'N';
   }
