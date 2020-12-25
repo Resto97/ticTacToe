@@ -15,23 +15,28 @@ export class CalculationService {
     iterationsCount: number,
     consecutiveSigns: number,
   ): string {
-    let i = start.i;
-    let j = start.j;
-    let counterSigns = 0;
-    // tslint:disable-next-line:prefer-for-of
-    for (let iteration = 0; iteration < iterationsCount; iteration++) {
-      const current = matrix[i][j];
-      const next = matrix[i + deltaI][j + deltaJ];
-      if (current !== '' && next !== '' && current === next) {
-        counterSigns++;
-        if (counterSigns === consecutiveSigns - 1) {
-          return current;
+    if (iterationsCount >= consecutiveSigns) {
+      let i = start.i;
+      let j = start.j;
+      let counterSigns = 0;
+      // tslint:disable-next-line:prefer-for-of
+      for (let iteration = 0; iteration < iterationsCount - 1; iteration++) {
+        console.log(i, j);
+        const current = matrix[i][j];
+        const next = matrix[i + deltaI][j + deltaJ];
+        console.log(current + ' ' + next);
+        if (current !== '' && next !== '' && current === next) {
+          counterSigns++;
+          if (counterSigns === consecutiveSigns - 1) {
+            // alert('ima pobednika?');
+            return current;
+          }
+        } else {
+          counterSigns = 0;
         }
-      } else {
-        counterSigns = 0;
+        i += deltaI;
+        j += deltaJ;
       }
-      i += deltaI;
-      j += deltaJ;
     }
     return 'N';
   }

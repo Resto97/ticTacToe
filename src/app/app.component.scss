@@ -1,42 +1,50 @@
 $base-width: 400px;
 
-h1 {
-  text-align: center;
-  background-color: black;
-  color: white;
-  margin-bottom: 0px;
-  margin-top: 0px;
-}
+:host {
+  display: flex;
 
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: white;
-}
-
-li {
-  float: left;
-
-  a {
-    display: block;
-    padding: 6px 14px;
-    background-color: white;
+  h1 {
     text-align: center;
-    text-decoration: none;
-    color: black;
+    background-color: black;
+    color: white;
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
 
-    &:hover {
-      background-color: silver;
-    }
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+  }
 
-    &.active {
-      background: rgb(170, 170, 170);
+  li {
+    float: left;
+
+    a {
+      display: block;
+      padding: 6px 14px;
+      background-color: white;
+      text-align: center;
+      text-decoration: none;
+      color: black;
+
+      &:hover {
+        background-color: silver;
+      }
+
+      &.active {
+        background: rgb(170, 170, 170);
+      }
     }
   }
-}
 
-.nav-itemR {
-  float: right;
+  .nav-itemR {
+    float: right;
+  }
+
+  > ::ng-deep app-table {
+    flex: 1 1 auto;
+  }
 }

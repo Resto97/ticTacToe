@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren
 import { CalculationService } from 'src/app/services/calculation.service';
 import { CellComponent } from '../cell/cell.component';
 import { TableConfig, Matrix, Sign } from '../../services/table-config';
+import { getMajorDiagonalLength, getMajorDiagonalStart, getMinorDiagonalStart, getMinorDiagonalLength } from 'src/app/utils';
 
 @Component({
   selector: 'app-table',
@@ -57,107 +58,57 @@ export class TableComponent {
     this.turnCounter++;
     this.columnMatrix[column][row] = this.nextPlayer;
     this.rowMatrix[row][column] = this.nextPlayer;
-    // check the winner in the row of last move
-    if (this.turnCounter > this.signsForWinner * 2 - 2) {
-      let getWinner = this.calculationService.getWinnerIfThereIsOne(this.rowMatrix[row], this.signsForWinner);
-      if (getWinner !== 'N') {
-        alert(getWinner);
-        this.weHaveWinner();
-      }
-      // check the winner in the column of last move
-      getWinner = this.calculationService.getWinnerIfThereIsOne(this.columnMatrix[column], this.signsForWinner);
-      if (getWinner !== 'N') {
-        alert(getWinner);
-        this.weHaveWinner();
-      }
-      // check diagonal
-      // add elementes top left of last/current play to diagonalarray
-      const diagonalArray: string[] = Array(1).fill('');
-      let isThereMoreElements = true;
-      let rowNumberToCheck = row;
-      let colNumberToCheck = column;
-      diagonalArray.unshift(this.nextPlayer);
-      while (isThereMoreElements) {
-        rowNumberToCheck--;
-        colNumberToCheck--;
-        if (rowNumberToCheck > -1 && colNumberToCheck > -1) {
-          diagonalArray.unshift(this.rowMatrix[rowNumberToCheck][colNumberToCheck]);
-        } else {
-          isThereMoreElements = false;
-        }
-      }
-      // add elementes bottom right of last/current play to diagonalarray
-      isThereMoreElements = true;
-      rowNumberToCheck = row;
-      colNumberToCheck = column;
-      diagonalArray.pop();
-      while (isThereMoreElements) {
-        rowNumberToCheck++;
-        colNumberToCheck++;
-        if (rowNumberToCheck < this.tableHeight && colNumberToCheck < this.tableWidth) {
-          diagonalArray.push(this.rowMatrix[rowNumberToCheck][colNumberToCheck]);
-        } else {
-          isThereMoreElements = false;
-        }
-      }
-      // If diagonal has more elements or equal than necessary to win the game, check if there is winner
-      if (diagonalArray.length >= this.signsForWinner) {
-        getWinner = this.calculationService.getWinnerIfThereIsOne(diagonalArray, this.signsForWinner);
-        if (getWinner !== 'N') {
-          alert(getWinner);
-          this.weHaveWinner();
-        }
-      }
-      // check antidiagonal
-      const antiDiagonalArray: string[] = Array(1).fill('');
-      // Adding elements bottom left of current play to antiDiagonaArray
-      isThereMoreElements = true;
-      rowNumberToCheck = row;
-      colNumberToCheck = column;
-      antiDiagonalArray.unshift(this.nextPlayer);
-      while (isThereMoreElements) {
-        rowNumberToCheck++;
-        colNumberToCheck--;
-        if (rowNumberToCheck < this.tableHeight && colNumberToCheck > -1) {
-          antiDiagonalArray.unshift(this.rowMatrix[rowNumberToCheck][colNumberToCheck]);
-        } else {
-          isThereMoreElements = false;
-        }
-      }
-      antiDiagonalArray.pop();
-      // Adding elements top right of current play to antiDiagonaArray
-      isThereMoreElements = true;
-      rowNumberToCheck = row;
-      colNumberToCheck = column;
-      while (isThereMoreElements) {
-        rowNumberToCheck--;
-        colNumberToCheck++;
-        if (rowNumberToCheck > -1 && colNumberToCheck < this.tableWidth) {
-          antiDiagonalArray.push(this.rowMatrix[rowNumberToCheck][colNumberToCheck]);
-        } else {
-          isThereMoreElements = false;
-        }
-      }
-      // If antiDiagonal has more elements or equal than necessary to win the game, check if there is winner
-      if (antiDiagonalArray.length >= this.signsForWinner) {
-        getWinner = this.calculationService.getWinnerIfThereIsOne(antiDiagonalArray, this.signsForWinner);
-        if (getWinner !== 'N') {
-          alert(getWinner);
-          this.weHaveWinner();
-        }
-      }
-      // Check if it's tie
-      if (this.turnCounter === this.tableHeight * this.tableWidth) {
-        this.isThereWinner = true;
-        this.displayMessage = 'Its a tie';
-        return;
-      }
+    console.log(this.rowMatrix);
+    const winner = this.getWinner(row, column);
+
+    if (winner !== 'N') {
+      this.weHaveWinner();
     }
     this.nextPlayer = this.nextPlayer === 'X' ? 'O' : 'X';
   }
+
+  private getWinner(row: number, column: number) {
+    const checks = [
+      // rows
+      () => this.calculationService.getWinnerIfThereIsOne(
+        this.rowMatrix,
+        { i: row, j: 0 },
+        0, 1,
+        this.tableWidth, this.signsForWinner,
+      ),
+      // columns
+      () => this.calculationService.getWinnerIfThereIsOne(
+        this.rowMatrix,
+        { i: 0, j: column },
+        1, 0,
+        this.tableHeight, this.signsForWinner
+      ),
+      // major diagonal
+      () => this.calculationService.getWinnerIfThereIsOne(
+        this.rowMatrix,
+        getMajorDiagonalStart({ i: row, j: column }),
+        1, 1,
+        getMajorDiagonalLength(getMajorDiagonalStart({ i: row, j: column }), this.tableWidth, this.tableHeight),
+        this.signsForWinner
+      ),
+      // minor diagonal
+      () => this.calculationService.getWinnerIfThereIsOne(
+        this.rowMatrix,
+        getMinorDiagonalStart({ i: row, j: column }, this.tableWidth),
+        1, -1,
+        getMinorDiagonalLength( getMinorDiagonalStart({ i: row, j: column }, this.tableWidth), this.tableWidth, this.tableHeight),
+        this.signsForWinner
+      ),
+    ];
+    return checks.find(check => {
+      const winner = check();
+      return winner === 'X' || winner === 'O';
+    }) ?? 'N';
+  }
+
 }
 
-
+/*
 /* this.turnCounter++;
     this.tableMatrix[row][column] = this.nextPlayer;
     if (this.turnCounter > this.tableConfig.minimalTurnsToWin) {

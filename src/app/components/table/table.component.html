@@ -1,28 +1,16 @@
-<div class="backGround">
-  <h3 *ngIf="isThereWinner; else elseBlok">GAME OVER!</h3>
-  <ng-template #elseBlok>
-    <h3>Player: {{ nextPlayer }} turn</h3>
-  </ng-template>
-  <div class="tableContainer">
-    <table>
-      <tr *ngFor="let row of rowMatrix; index as i">
-        <td *ngFor="let sign of row; index as j">
-          <app-cell
-            (cellClicked)="cellIsClicked(i, j)"
-            [sign]="sign"
-            [isDisabled]="isThereWinner"
-          ></app-cell>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <h3 *ngIf="isThereWinner; else elseBlock">{{ displayMessage }}</h3>
-  <ng-template #elseBlock>
-    <h3>Game in progress</h3>
-  </ng-template>
-  <div class="buttonWrapper">
-    <button (click)="resetGame($event)">New game</button>
-  </div>
-</div>
-
-<pre>{{ rowMatrix | json }}</pre>
+<h3 *ngIf="isThereWinner; else elseBlok">GAME OVER!</h3>
+<ng-template #elseBlok>
+  <h3>Player: {{ nextPlayer }} turn</h3>
+</ng-template>
+<table>
+  <tr *ngFor="let row of rowMatrix; index as i">
+    <td *ngFor="let sign of row; index as j">
+      <app-cell (cellClicked)="cellIsClicked(i, j)" [sign]="sign" [isDisabled]="isThereWinner"></app-cell>
+    </td>
+  </tr>
+</table>
+<h3 *ngIf="isThereWinner; else elseBlock">{{ displayMessage }}</h3>
+<ng-template #elseBlock>
+  <h3>Game in progress</h3>
+</ng-template>
+<button (click)="resetGame($event)">New game</button>

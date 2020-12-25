@@ -26,6 +26,7 @@ export class CellComponent {
   }
 
   updateCellState(): void {
+    // alert(this.sign);
     this.cellClicked.emit();
   }
 

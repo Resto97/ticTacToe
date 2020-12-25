@@ -41,10 +41,19 @@ export function getMinorDiagonalStart(
   }
 }
 
-// export function getMinorDiagonalLength (
-//
-// ) {
-//
-// }
+export function getMinorDiagonalLength(
+  coord: Coord,
+  colsCount: number,
+  rowsCount: number,
+): number {
+  if (coord.i === 0) {
+    if (coord.j > rowsCount - 1) {
+      return rowsCount;
+    }
+    return coord.j + 1;
 
-
+  } else {
+    return rowsCount - coord.i;
+  }
+  return 0;
+}
